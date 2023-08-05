@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.udemy_roompractice.databinding.ActivityMainBinding
 import com.example.udemy_roompractice.db.SubscriberDatabase
 import com.example.udemy_roompractice.db.SubscriberRepository
@@ -29,13 +30,21 @@ class MainActivity : AppCompatActivity() {
         binding.subscriberViewModel = subscriberViewModel
         binding.lifecycleOwner = this
 
+        initSubscriberRecyclerView()
+    }
+
+    fun initSubscriberRecyclerView() {
+
+        binding.rvSubscriber.layoutManager = LinearLayoutManager(this)
         displaySubscriberList()
+
     }
 
     private fun displaySubscriberList() {
 
         subscriberViewModel.allSubscribers.observe(this, Observer { subscriberList ->
             Log.i(TAG, subscriberList.toString())
+            binding.rvSubscriber.adapter = SubscriberRecyclerViewAdapter(subscriberList)
         })
 
     }
