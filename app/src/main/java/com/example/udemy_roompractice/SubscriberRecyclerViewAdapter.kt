@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.udemy_roompractice.databinding.SubscriberListItemBinding
 import com.example.udemy_roompractice.db.Subscriber
 
-class SubscriberRecyclerViewAdapter(private val subscribers : List<Subscriber>) : RecyclerView.Adapter<SubscriberViewHolder>(){
+class SubscriberRecyclerViewAdapter(private val subscribers : List<Subscriber>, private val onClickListener : (Subscriber) -> Unit) : RecyclerView.Adapter<SubscriberViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubscriberViewHolder {
 
@@ -23,7 +23,7 @@ class SubscriberRecyclerViewAdapter(private val subscribers : List<Subscriber>) 
     }
 
     override fun onBindViewHolder(holder: SubscriberViewHolder, position: Int) {
-        holder.bindSubscriber(subscribers[position])
+        holder.bindSubscriber(subscribers[position], onClickListener)
     }
 
 
@@ -32,10 +32,9 @@ class SubscriberRecyclerViewAdapter(private val subscribers : List<Subscriber>) 
 class SubscriberViewHolder(val binding: SubscriberListItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bindSubscriber(subscriber: Subscriber) {
+    fun bindSubscriber(subscriber: Subscriber, onClickListener : (Subscriber) -> Unit) {
         binding.tvSubscriberName.text = subscriber.name
         binding.tvSubscriberEmail.text = subscriber.email
-
 
     }
 

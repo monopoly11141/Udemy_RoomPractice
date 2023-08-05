@@ -2,12 +2,14 @@ package com.example.udemy_roompractice
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.udemy_roompractice.databinding.ActivityMainBinding
+import com.example.udemy_roompractice.db.Subscriber
 import com.example.udemy_roompractice.db.SubscriberDatabase
 import com.example.udemy_roompractice.db.SubscriberRepository
 
@@ -44,10 +46,14 @@ class MainActivity : AppCompatActivity() {
 
         subscriberViewModel.allSubscribers.observe(this, Observer { subscriberList ->
             Log.i(TAG, subscriberList.toString())
-            binding.rvSubscriber.adapter = SubscriberRecyclerViewAdapter(subscriberList)
+            binding.rvSubscriber.adapter = SubscriberRecyclerViewAdapter(subscriberList, {clickedSubscriber : Subscriber -> onSubscriberItemClick(clickedSubscriber)})
         })
 
     }
 
+    private fun onSubscriberItemClick(subscriber : Subscriber) {
+        Toast.makeText(this, "Subscriber ${subscriber.name} clicked", Toast.LENGTH_SHORT).show()
+
+    }
 
 }
