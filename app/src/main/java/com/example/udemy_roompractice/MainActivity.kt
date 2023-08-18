@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var subscriberViewModel: SubscriberViewModel
+    private lateinit var adapter : SubscriberRecyclerViewAdapter
     private val TAG = this.javaClass.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,11 +34,19 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
         initSubscriberRecyclerView()
+
+        subscriberViewModel.message.observe(this, Observer {
+            it.getContentIfNotHandled()?.let {toastMessage ->
+                Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     fun initSubscriberRecyclerView() {
 
         binding.rvSubscriber.layoutManager = LinearLayoutManager(this)
+        adapter = SubscriberRecyclerViewAdapter({clickedSubscriber : Subscriber -> onSubscriberItemClick(clickedSubscriber)})
+        binding.rvSubscriber.adapter = adapter
         displaySubscriberList()
 
     }
@@ -46,14 +55,15 @@ class MainActivity : AppCompatActivity() {
 
         subscriberViewModel.allSubscribers.observe(this, Observer { subscriberList ->
             Log.i(TAG, subscriberList.toString())
-            binding.rvSubscriber.adapter = SubscriberRecyclerViewAdapter(subscriberList, {clickedSubscriber : Subscriber -> onSubscriberItemClick(clickedSubscriber)})
+            adapter.setList(subscriberList)
+            adapter.notifyDataSetChanged()
         })
 
     }
 
     private fun onSubscriberItemClick(subscriber : Subscriber) {
-        Toast.makeText(this, "Subscriber ${subscriber.name} clicked", Toast.LENGTH_SHORT).show()
-
+        //Toast.makeText(this, "Subscriber ${subscriber.name} clicked", Toast.LENGTH_SHORT).show()
+        subscriberViewModel.initUpdateAndDelete(subscriber)
     }
 
 }
